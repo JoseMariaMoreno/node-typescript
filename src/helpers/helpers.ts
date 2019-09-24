@@ -1,5 +1,9 @@
 /**
- * Este interface define la estructura de un mensaje de respuesta
+ * File with miscelanous functions used by all app modules
+ */
+
+/**
+ * A Message send to logger
  */
 export interface IMessage {
   text: string;
@@ -22,11 +26,5 @@ export function bye(): IMessage {
   return { 
     "text": "¡Hasta luego Lucas!",
     "important": false
-  };
-}
-
-export function hola(): IMessage {
-  return { 
-    "text": "¡Hola!" 
   };
 }

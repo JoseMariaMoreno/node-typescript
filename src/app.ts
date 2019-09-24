@@ -1,34 +1,19 @@
-// lib/app.ts
-import express = require('express');
-import helpers = require( './helpers' );
+import { AbstractApp } from './abstract/abstract.app';
+import { Auth } from './auth.module';
+import { IAppOptions } from './abstract/app-options.interface'; 
 
-/**
- * The Main Class
- */
-class App {
-  
-  public id: string;
-  public description: string;
-  private routes: express.Application;
-  /**
-   * App constructor
-   * @param id Unique id for the app
-   * @param description An app funcionality description
-   */
-  constructor( id: string, description: string ) {
-    this.id = id;
-    this.description = description;
-    this.routes = express();
+class App extends AbstractApp {
 
-    this.routes.get('/', ( req, res ) => {
-      res.send( helpers.hello() );
-    });
+  public auth: Auth;
 
-    this.routes.listen(3000, function () {
-      console.log('Example app listening on port 3000!');
-    });
+  constructor( id: string, description: string, options?: IAppOptions ) {
+    super(id, description, options );
 
+    this.auth = new Auth( this );
 
   }
-
 }
+
+const app = new App('appId', 'App description');
+
+app.init().then( () => app._logger.info(app.description, 'running in port', app.port ) ).catch(console.error);

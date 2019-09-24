@@ -1,21 +1,29 @@
 import { AbstractApp } from './abstract/abstract.app';
-import { Auth } from './auth.module';
+import { AuthModule } from './auth.module';
 import { IAppOptions } from './abstract/app-options.interface'; 
+import { SettingsModule } from './settings/settings.module';
 
-class App extends AbstractApp {
+require('dotenv').config();
 
-  public auth: Auth;
+
+export class App extends AbstractApp {
+
+  public auth: AuthModule;
+  public settings: SettingsModule;
 
   constructor( id: string, description: string, options?: IAppOptions ) {
 
     super( id, description, options );
 
-    this.auth = new Auth( 'auth', this );
+    this.auth = new AuthModule( this );
+    this.settings = new SettingsModule( this );
     this.logInfo( 'App constructor', this.id );
 
   }
 }
 
-const app = new App('appId', 'App description');
+//const app = new App('appId', 'App description');
 
-app.init().then( () => app._logger.info(app.description, 'running in port', app.port ) ).catch(console.error);
+console.log( 'DB_HOST:', process.env.DB_HOST );
+
+//app.init().then( () => app._logger.info(app.description, 'running in port', app.port ) ).catch(console.error);

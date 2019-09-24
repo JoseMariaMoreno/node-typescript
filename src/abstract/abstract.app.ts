@@ -6,6 +6,7 @@ import express = require('express');
 import helpers = require('../helpers/helpers');
 import { configure, getLogger, Log4js } from 'log4js';
 import { IAppOptions } from './app-options.interface';
+import mongoose = require('mongoose');
 
 
 /**
@@ -51,6 +52,9 @@ export class AbstractApp {
     return new Promise((resolve, reject) => {
 
       try {
+
+        
+        mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
 
         // Route for root api
         self.express.get('/', (req, res) => {

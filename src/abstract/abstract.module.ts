@@ -1,19 +1,21 @@
-const express = require( 'express' );
+import { AbstractApp } from '../abstract/abstract.app';
+import express = require('express');
 /**
  * Abstract module to be overrided for custom app functionalities
+ * @type {AbstractApp} parent Parent App or Module
  */
 export class AbstractModule {
   
-  private _parent: any;
+  private _parent: AbstractApp;
   public id: string = '';  
   public _router: any;
   public _path: string = '/';
 
   /**
    * This class should be override for each module you can implement
-   * @param {any} parent Parent module or main app 
+   * @param {AbstractApp} parent Parent module or main app 
    */
-  constructor( id: string, parent: any ) {
+  constructor( id: string, parent: AbstractApp ) {
     this.id = id;
     this._parent = parent;
     this.logInfo( 'Module constructor' );
@@ -26,14 +28,15 @@ export class AbstractModule {
     return this._path;
   }
 
+  getRouter(): any {
+    return this._router;
+  }
+
   /**
    * This method creates an Express Router
    */
   createRouter(): void {
     this._router = express.Router();
-    this._router.get( this.getPath(), ( req: any, res: any ) => {
-      res.send( this.id );
-    });
     this.getParent().express.use( this._router );
   }
 
@@ -89,6 +92,30 @@ export class AbstractModule {
    */
   logError( ...params: any ): void {
     this.getParent().logError( this.id + ':', ...params );
+  }
+
+
+  /**
+   * This method send a 400 status error
+   * @param req 
+   * @param res 
+   * @param {any} error 
+   */
+  sendError( req: express.Request, res: express.Response, error: any ): void {
+    res.status( 400 );
+    res.send( error );
+
+  }
+  /**
+   * This method send a 200 status and correct data
+   * @param req 
+   * @param res 
+   * @param {any} data 
+   */
+  sendResponse( req: express.Request, res: express.Response, data: any ): void {
+    res.status( 200 );
+    res.send( data );
+
   }
 
 

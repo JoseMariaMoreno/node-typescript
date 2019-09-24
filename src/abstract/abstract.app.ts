@@ -5,7 +5,7 @@
 import express = require('express');
 import helpers = require('../helpers/helpers');
 import { configure, getLogger, Log4js } from 'log4js';
-import { IAppOptions } from './app-options.interface'; 
+import { IAppOptions } from './app-options.interface';
 
 
 /**
@@ -17,10 +17,11 @@ export class AbstractApp {
 
   public id: string;
   public description: string;
-  private routes: express.Application;
+  private express: express.Application;
   public port: number;
   public options: IAppOptions;
   public _logger: any;
+  public _router: any;
 
   /** 
    * App constructor
@@ -31,14 +32,14 @@ export class AbstractApp {
   constructor(id: string, description: string, options?: IAppOptions) {
     this.id = id;
     this.description = description;
-    this.routes = express();
+    this.express = express();
     this.options = options || {};
     this.port = this.options.port || 3333;
 
     // Logger
     this._logger = getLogger();
     this._logger.level = 'debug';
-    this._logger.info( 'App constructor');
+    this._logger.info('App constructor');
 
   }
 
@@ -52,12 +53,12 @@ export class AbstractApp {
       try {
 
         // Route for root api
-        self.routes.get('/', (req, res) => {
+        self.express.get('/', (req, res) => {
           res.send(helpers.hello());
         });
 
         // Start server
-        self.routes.listen(self.port, () => {
+        self.express.listen(self.port, () => {
           resolve();
         });
 
@@ -68,7 +69,7 @@ export class AbstractApp {
 
     });
 
-    
+
 
   }
 
@@ -82,9 +83,51 @@ export class AbstractApp {
   /**
    * This method returns the logger module
    */
-  getLogger(): Log4js {
+  getLogger(): any {
     return this._logger;
   }
+
+  /**
+   * This function creates a system trace level log
+   * @param param One or more string, numbers, or object to be logged
+   */
+  logTrace(...param: any): void {
+    this.getLogger().trace(...param);
+  }
+
+  /**
+   * This function creates a system debug level log
+   * @param param One or more string, numbers, or object to be logged
+   */
+  logDebug(...param: any): void {
+    this.getLogger().debug(...param);
+  }
+
+  /**
+   * This function creates a system info level log
+   * @param param One or more string, numbers, or object to be logged
+   */
+  logInfo(...param: any): void {
+    this.getLogger().info(...param);
+  }
+
+  /**
+   * This function creates a system warning level log
+   * @param param One or more string, numbers, or object to be logged
+   */
+  logWarn(...param: any): void {
+    this.getLogger().warn(...param);
+  }
+
+  /**
+   * This function creates a system error level log
+   * @param param One or more string, numbers, or object to be logged
+   */
+  logError(...param: any): void {
+    this.getLogger().error(...param);
+  }
+
+
 
 }
 

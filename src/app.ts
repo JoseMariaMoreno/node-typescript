@@ -7,9 +7,11 @@ class App extends AbstractApp {
   public auth: Auth;
 
   constructor( id: string, description: string, options?: IAppOptions ) {
-    super(id, description, options );
 
-    this.auth = new Auth( this );
+    super( id, description, options );
+
+    this.auth = new Auth( 'auth', this );
+    this.logInfo( 'App constructor', this.id );
 
   }
 }

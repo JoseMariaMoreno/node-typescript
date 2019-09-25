@@ -14,15 +14,17 @@ export class SettingsModule extends AbstractModule {
 
   constructor( parent: App ) {
     super( 'settings', parent );
-    this.createRouter();
+    
     this.createRoutes();
   }
 
   createRoutes(): void {
     const self = this;
 
+    self.createRouter();
+
     // GET Path
-    this.getRouter().get( this.getPath(), ( req: express.Request, res: express.Response ) => {
+    self.getRouter().get( this.getPath(), ( req: express.Request, res: express.Response ) => {
       self.getSettings( req ).then( ( settings: ISettings ) => {
         res.send( settings );
       }).catch( error => self.sendError( req, res, error ) );
@@ -42,13 +44,13 @@ export class SettingsModule extends AbstractModule {
    * Return account settings
    * @param req 
    */
-  getSettings( req: object ): Promise<ISettings> {
+  getSettings( req: object ): Promise<object> {
     const self = this;
     return new Promise( ( resolve, reject ) => {
-      let data: any = {
-        "id": "xxxx"
-      };
-      resolve( data );
+      SettingsModel.find().then( result => {
+        resolve( result );
+      })
+      
     });
   }
 
@@ -60,11 +62,7 @@ export class SettingsModule extends AbstractModule {
     const self = this;
     return new Promise( ( resolve, reject ) => {
       
-      let newSettings = new SettingsModel( {
-        "id": "xxxx"
-      } );
-      
-      newSettings.save().then( resolve ).catch( reject );
+      SettingsModel.create( req.body ).then( data => resolve( data ) ).catch( error => reject( error ) );
       
     });
   }

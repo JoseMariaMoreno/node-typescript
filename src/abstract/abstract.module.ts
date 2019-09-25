@@ -1,5 +1,6 @@
 import { AbstractApp } from '../abstract/abstract.app';
 import express = require('express');
+import { Log4js } from 'log4js';
 /**
  * Abstract module to be overrided for custom app functionalities
  * @type {AbstractApp} parent Parent App or Module
@@ -8,7 +9,7 @@ export class AbstractModule {
   
   private _parent: AbstractApp;
   public id: string = '';  
-  public _router: any;
+  public _router: express.Router;
   public _path: string = '/';
 
   /**
@@ -18,6 +19,7 @@ export class AbstractModule {
   constructor( id: string, parent: AbstractApp ) {
     this.id = id;
     this._parent = parent;
+    this._router = express.Router();
     this.logInfo( 'Module constructor' );
   }
 
@@ -28,29 +30,31 @@ export class AbstractModule {
     return this._path;
   }
 
-  getRouter(): any {
+  /**
+   * This method returns this module express router
+   */
+  getRouter(): express.Router {
     return this._router;
   }
 
   /**
-   * This method creates an Express Router
+   * This method creates an Express Router and attach to parent router
    */
   createRouter(): void {
-    this._router = express.Router();
-    this.getParent().express.use( this._router );
+    this.getParent().getRouter().use( this.getRouter() );
   }
 
   /**
    * This function returns the parent object (App or another module)
    */
-  getParent(): any {
+  getParent(): AbstractApp {
     return this._parent;
   }
 
   /**
    * This method returns the logger module
    */
-  getLogger(): any {
+  getLogger(): Log4js {
     return this.getParent().getLogger();
   }
 
@@ -104,7 +108,6 @@ export class AbstractModule {
   sendError( req: express.Request, res: express.Response, error: any ): void {
     res.status( 400 );
     res.send( error );
-
   }
   /**
    * This method send a 200 status and correct data
@@ -115,7 +118,6 @@ export class AbstractModule {
   sendResponse( req: express.Request, res: express.Response, data: any ): void {
     res.status( 200 );
     res.send( data );
-
   }
 
 

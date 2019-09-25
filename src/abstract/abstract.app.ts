@@ -7,7 +7,7 @@ import helpers = require('../helpers/helpers');
 import { configure, getLogger, Log4js } from 'log4js';
 import { IAppOptions } from './app-options.interface';
 import mongoose = require('mongoose');
-
+import bodyParser = require( 'body-parser' );
 
 /**
  * The Main Class
@@ -22,7 +22,7 @@ export class AbstractApp {
   public port: number;
   public options: IAppOptions;
   public _logger: any;
-  public _router: any;
+  public _router: express.Router;
 
   /** 
    * App constructor
@@ -34,13 +34,15 @@ export class AbstractApp {
     this.id = id;
     this.description = description;
     this.express = express();
+
     this.options = options || {};
     this.port = this.options.port || 3333;
+    this._router = express.Router();
 
     // Logger
     this._logger = getLogger();
-    this._logger.level = 'debug';
-    this._logger.info('App constructor');
+    this._logger.level = 'trace';
+    this._logger.trace('App constructor');
 
   }
 
@@ -53,19 +55,23 @@ export class AbstractApp {
 
       try {
 
-        
-        mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
+        self.express.use(bodyParser.urlencoded({ extended: false }));
+        self.express.use(bodyParser.json());
 
+        
         // Route for root api
-        self.express.get('/', (req, res) => {
+        self.getRouter().get('/', (req, res) => {
           res.send(helpers.hello());
         });
+
+        self.express.use( '/api/1', self.getRouter() );
 
         // Start server
         self.express.listen(self.port, () => {
           resolve();
         });
 
+        
       } catch (error) {
         reject(error)
       }
@@ -75,6 +81,26 @@ export class AbstractApp {
 
 
 
+  }
+
+  getRouter(): express.Router {
+    return this._router;
+  }
+
+  /**
+   * This method open a database connection
+   */
+  initDatabase(): Promise<void> {
+    const self = this;
+    return new Promise( ( resolve, reject ) => {
+      try {
+        mongoose.connect( process.env.DB_URI || '', {useNewUrlParser: true, useUnifiedTopology: true });
+        self.logTrace( 'Database initialized' );
+        resolve();
+      } catch( error ) {
+        reject( error );
+      }
+    });
   }
 
   /**

@@ -2,9 +2,9 @@ import { AbstractApp } from './abstract/abstract.app';
 import { AuthModule } from './auth.module';
 import { IAppOptions } from './abstract/app-options.interface'; 
 import { SettingsModule } from './settings/settings.module';
+import dotenv = require('dotenv');
 
-require('dotenv').config();
-
+dotenv.config({ debug: true, path: __dirname + '/.env' });
 
 export class App extends AbstractApp {
 
@@ -22,8 +22,8 @@ export class App extends AbstractApp {
   }
 }
 
-//const app = new App('appId', 'App description');
+const app = new App('appId', 'App description');
 
-console.log( 'DB_HOST:', process.env.DB_HOST );
-
-//app.init().then( () => app._logger.info(app.description, 'running in port', app.port ) ).catch(console.error);
+app.init().then( () => {
+  app.initDatabase().then( () => app.logInfo(app.description, 'running in port', app.port ) )
+}).catch(app.logError);

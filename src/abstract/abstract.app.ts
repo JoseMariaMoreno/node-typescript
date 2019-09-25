@@ -94,9 +94,11 @@ export class AbstractApp {
     const self = this;
     return new Promise( ( resolve, reject ) => {
       try {
-        mongoose.connect( process.env.DB_URI || '', {useNewUrlParser: true, useUnifiedTopology: true });
-        self.logTrace( 'Database initialized' );
-        resolve();
+        mongoose.connect( process.env.DB_URI || '', {useNewUrlParser: true, useUnifiedTopology: true }).then( db => {
+          self.logTrace( 'Database initialized' );
+          resolve();
+        }).catch( error => reject( error ) );
+        
       } catch( error ) {
         reject( error );
       }

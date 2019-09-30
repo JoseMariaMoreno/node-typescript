@@ -38,8 +38,8 @@ class SettingsModule extends abstract_module_1.AbstractModule {
     getSettings(req) {
         const self = this;
         return new Promise((resolve, reject) => {
-            settings_model_1.default.find().then(result => {
-                resolve(result);
+            settings_model_1.default.find().then((settings) => {
+                resolve(settings);
             });
         });
     }

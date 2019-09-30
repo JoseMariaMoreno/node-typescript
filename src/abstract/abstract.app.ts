@@ -8,6 +8,7 @@ import { configure, getLogger, Log4js } from 'log4js';
 import { IAppOptions } from './app-options.interface';
 import mongoose = require('mongoose');
 import bodyParser = require( 'body-parser' );
+import { threadId } from 'worker_threads';
 
 /**
  * The Main Class
@@ -19,12 +20,11 @@ export class AbstractApp {
   public id: string;
   public description: string;
   private express: express.Application;
-  public port: number;
   public options: IAppOptions;
   public _logger: any;
   public _router: express.Router;
 
-  /** 
+  /**
    * App constructor
    * @param {string} id Unique id for the app
    * @param {string} description An app funcionality description
@@ -34,9 +34,7 @@ export class AbstractApp {
     this.id = id;
     this.description = description;
     this.express = express();
-
     this.options = options || {};
-    this.port = this.options.port || 3333;
     this._router = express.Router();
 
     // Logger
@@ -44,6 +42,31 @@ export class AbstractApp {
     this._logger.level = 'trace';
     this._logger.trace('App constructor');
 
+  }
+
+  /**
+   * Returns the server URL
+   */
+  getServer(): string {
+    return process.env.SERVER || 'http://127.0.0.1';
+  }
+
+  /**
+   * Return de web server port
+   */
+  getPort(): string {
+    return process.env.PORT || '3333';
+  }
+
+  /**
+   * Returns the api base path /api + api version
+   */
+  getBasePath(): string {
+    return process.env.BASE_PATH || '/api/1';
+  }
+
+  getURL(): string {
+    return this.getServer() + ':' + this.getPort() + this.getBasePath();
   }
 
   /**
@@ -58,7 +81,7 @@ export class AbstractApp {
         self.express.use(bodyParser.urlencoded({ extended: false }));
         self.express.use(bodyParser.json());
 
-        
+
         // Route for root api
         self.getRouter().get('/', (req, res) => {
           res.send(helpers.hello());
@@ -67,11 +90,17 @@ export class AbstractApp {
         self.express.use( '/api/1', self.getRouter() );
 
         // Start server
-        self.express.listen(self.port, () => {
+        self.express.listen(self.getPort(), () => {
           resolve();
         });
 
-        
+        self.initDatabase().then( dbMessage => {
+
+          self.logTrace( 'App initalized in', self.getURL(), dbMessage );
+
+          resolve();
+        }).catch( reject );
+
       } catch (error) {
         reject(error)
       }
@@ -90,15 +119,20 @@ export class AbstractApp {
   /**
    * This method open a database connection
    */
-  initDatabase(): Promise<void> {
+  initDatabase(): Promise<string> {
     const self = this;
     return new Promise( ( resolve, reject ) => {
       try {
-        mongoose.connect( process.env.DB_URI || '', {useNewUrlParser: true, useUnifiedTopology: true }).then( db => {
-          self.logTrace( 'Database initialized' );
-          resolve();
-        }).catch( error => reject( error ) );
-        
+        const dbURI = process.env.DB_URI;
+        // self.logTrace( 'DB URI: ', dbURI );
+        if ( dbURI ) {
+          mongoose.connect( dbURI, {useNewUrlParser: true, useUnifiedTopology: true }).then( db => {
+            self.logTrace( 'Database connected' );
+            resolve('Database initialized');
+          }).catch( error => reject( error ) );
+        } else {
+          resolve( 'No database settings' );
+        }
       } catch( error ) {
         reject( error );
       }

@@ -6,8 +6,8 @@
   "scripts": {
     "tsc": "tsc",
     "init-typescript": "tsc --init",
-    "dev": "ts-node-dev --respawn --transpileOnly ./src/app.ts",
-    "prod": "tsc && node ./build/app.js",
+    "dev": "ts-node-dev --respawn --transpileOnly ./src/index.ts",
+    "prod": "tsc && node ./build/index.js",
     "test": "nyc mocha */**/*.test.ts",
     "typedoc": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --out docs/typedoc src"
   },
@@ -16,7 +16,9 @@
   "dependencies": {
     "@types/dotenv": "^6.1.1",
     "@types/express": "^4.17.1",
+    "@types/lodash": "^4.14.139",
     "@types/mongoose": "^5.5.17",
+    "@types/request-promise-native": "^1.0.17",
     "body-parser": "^1.19.0",
     "dotenv": "^8.1.0",
     "evernote": "^2.0.5",
@@ -27,6 +29,8 @@
     "moment": "^2.24.0",
     "mongoose": "^5.7.1",
     "nyc": "^14.1.1",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
     "ts-node-dev": "^1.0.0-pre.42",
     "typescript": "^3.5.3"
   },

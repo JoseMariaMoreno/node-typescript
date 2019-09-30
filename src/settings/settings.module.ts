@@ -3,6 +3,8 @@ import SettingsModel, { ISettings } from './settings.model';
 import { App } from '../app';
 import express = require('express');
 import { Settings } from 'http2';
+import * as _ from 'lodash';
+import * as helpers from '../helpers/helpers';
 
 /**
  * Settings module
@@ -14,7 +16,7 @@ export class SettingsModule extends AbstractModule {
 
   constructor( parent: App ) {
     super( 'settings', parent );
-    
+
     this.createRoutes();
   }
 
@@ -23,14 +25,14 @@ export class SettingsModule extends AbstractModule {
 
     self.createRouter();
 
-    // GET Path
+    // GET
     self.getRouter().get( this.getPath(), ( req: express.Request, res: express.Response ) => {
-      self.getSettings( req ).then( ( settings: ISettings ) => {
+      self.getSettings( req ).then( ( settings: ISettings[] ) => {
         res.send( settings );
       }).catch( error => self.sendError( req, res, error ) );
     });
 
-    // POST Path
+    // POST
     this.getRouter().post( this.getPath(), ( req: express.Request, res: express.Response ) => {
       self.newSettings( req ).then( ( settings: ISettings ) => {
         self.sendResponse( req, res, settings );
@@ -42,28 +44,35 @@ export class SettingsModule extends AbstractModule {
 
   /**
    * Return account settings
-   * @param req 
+   * @param req
    */
-  getSettings( req: object ): Promise<object> {
+  getSettings( req: object ): Promise<ISettings[]> {
     const self = this;
     return new Promise( ( resolve, reject ) => {
-      SettingsModel.find().then( result => {
-        resolve( result );
+      SettingsModel.find().then( ( settings: ISettings[] ) => {
+        resolve( settings );
       })
-      
+
     });
   }
 
   /**
    * Create a new account settings
-   * @param {express.Request} req 
+   * @param {express.Request} req
    */
   newSettings( req: object ): Promise<ISettings> {
     const self = this;
     return new Promise( ( resolve, reject ) => {
-      
-      SettingsModel.create( req.body ).then( data => resolve( data ) ).catch( error => reject( error ) );
-      
+
+      var dataToInsert: ISettings = _.get( req, 'body', null );
+
+      if ( dataToInsert ) {
+
+      SettingsModel.create( dataToInsert ).then( data => resolve( data ) ).catch( error => reject( error ) );
+      } else {
+        reject( helpers.errorObject( 'no_data_to_insert' ) )
+      }
+
     });
   }
 

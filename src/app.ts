@@ -1,10 +1,13 @@
 import { AbstractApp } from './abstract/abstract.app';
 import { AuthModule } from './auth.module';
-import { IAppOptions } from './abstract/app-options.interface'; 
+import { IAppOptions } from './abstract/app-options.interface';
 import { SettingsModule } from './settings/settings.module';
+
 import dotenv = require('dotenv');
 
-dotenv.config({ debug: true, path: __dirname + '/.env' });
+const envFile: string = __dirname + '/.env';
+console.log( ':::: Getting enviroment vars from', envFile );
+dotenv.config({ debug: true, path: envFile });
 
 export class App extends AbstractApp {
 
@@ -22,8 +25,3 @@ export class App extends AbstractApp {
   }
 }
 
-const app = new App('appId', 'App description');
-
-app.init().then( () => {
-  app.initDatabase().then( () => app.logInfo(app.description, 'running in port', app.port ) )
-}).catch(app.logError);

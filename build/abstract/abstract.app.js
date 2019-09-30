@@ -62,14 +62,18 @@ class AbstractApp {
     /**
      * This method open a database connection
      */
-    initDatabase() {
+    initDatabase(): Promise<string> {
         const self = this;
         return new Promise((resolve, reject) => {
             try {
+                const dbURI =
+                if ( dbURI ) {
                 mongoose.connect(process.env.DB_URI || '', { useNewUrlParser: true, useUnifiedTopology: true }).then(db => {
-                    self.logTrace('Database initialized');
-                    resolve();
+                    resolve( 'Database initialized' );
                 }).catch(error => reject(error));
+              } else {
+                resolve( 'No database settings' );
+              }
             }
             catch (error) {
                 reject(error);

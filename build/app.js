@@ -16,6 +16,6 @@ class App extends abstract_app_1.AbstractApp {
 exports.App = App;
 const app = new App('appId', 'App description');
 app.init().then(() => {
-    app.initDatabase().then(() => app.logInfo(app.description, 'running in port', app.port));
+    app.initDatabase().then( dbInitializationMessage => app.logInfo( dbInitializationMessage, app.description, 'running in port', app.port));
 }).catch(app.logError);
 //# sourceMappingURL=app.js.map

@@ -25,12 +25,32 @@ class AbstractApp {
         this.description = description;
         this.express = express();
         this.options = options || {};
-        this.port = this.options.port || 3333;
         this._router = express.Router();
         // Logger
         this._logger = log4js_1.getLogger();
         this._logger.level = 'trace';
         this._logger.trace('App constructor');
+    }
+    /**
+     * Returns the server URL
+     */
+    getServer() {
+        return process.env.SERVER || 'http://127.0.0.1';
+    }
+    /**
+     * Return de web server port
+     */
+    getPort() {
+        return process.env.PORT || '3333';
+    }
+    /**
+     * Returns the api base path /api + api version
+     */
+    getBasePath() {
+        return process.env.BASE_PATH || '/api/1';
+    }
+    getURL() {
+        return this.getServer() + ':' + this.getPort() + this.getBasePath();
     }
     /**
      * This method initialize routes and start server
@@ -47,9 +67,13 @@ class AbstractApp {
                 });
                 self.express.use('/api/1', self.getRouter());
                 // Start server
-                self.express.listen(self.port, () => {
+                self.express.listen(self.getPort(), () => {
                     resolve();
                 });
+                self.initDatabase().then(dbMessage => {
+                    self.logTrace('App initalized in', self.getURL(), dbMessage);
+                    resolve();
+                }).catch(reject);
             }
             catch (error) {
                 reject(error);
@@ -62,18 +86,21 @@ class AbstractApp {
     /**
      * This method open a database connection
      */
-    initDatabase(): Promise<string> {
+    initDatabase() {
         const self = this;
         return new Promise((resolve, reject) => {
             try {
-                const dbURI =
-                if ( dbURI ) {
-                mongoose.connect(process.env.DB_URI || '', { useNewUrlParser: true, useUnifiedTopology: true }).then(db => {
-                    resolve( 'Database initialized' );
-                }).catch(error => reject(error));
-              } else {
-                resolve( 'No database settings' );
-              }
+                const dbURI = process.env.DB_URI;
+                // self.logTrace( 'DB URI: ', dbURI );
+                if (dbURI) {
+                    mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true }).then(db => {
+                        self.logTrace('Database connected');
+                        resolve('Database initialized');
+                    }).catch(error => reject(error));
+                }
+                else {
+                    resolve('No database settings');
+                }
             }
             catch (error) {
                 reject(error);

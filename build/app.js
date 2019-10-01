@@ -4,7 +4,9 @@ const abstract_app_1 = require("./abstract/abstract.app");
 const auth_module_1 = require("./auth.module");
 const settings_module_1 = require("./settings/settings.module");
 const dotenv = require("dotenv");
-dotenv.config({ debug: true, path: __dirname + '/.env' });
+const envFile = __dirname + '/.env';
+console.log(':::: Getting enviroment vars from', envFile);
+dotenv.config({ debug: true, path: envFile });
 class App extends abstract_app_1.AbstractApp {
     constructor(id, description, options) {
         super(id, description, options);
@@ -14,8 +16,4 @@ class App extends abstract_app_1.AbstractApp {
     }
 }
 exports.App = App;
-const app = new App('appId', 'App description');
-app.init().then(() => {
-    app.initDatabase().then( dbInitializationMessage => app.logInfo( dbInitializationMessage, app.description, 'running in port', app.port));
-}).catch(app.logError);
 //# sourceMappingURL=app.js.map

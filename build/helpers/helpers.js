@@ -22,4 +22,13 @@ function bye() {
     };
 }
 exports.bye = bye;
+/**
+ * This method return an standard error object
+ */
+function errorObject(message) {
+    return {
+        message
+    };
+}
+exports.errorObject = errorObject;
 //# sourceMappingURL=helpers.js.map

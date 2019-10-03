@@ -1,2 +1,4 @@
 --require ts-node/register
 --recursive
+--timeout 5000
+--colors

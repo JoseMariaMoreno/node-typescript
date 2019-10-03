@@ -3,12 +3,12 @@
 <head>
     <title>Code coverage report for src/abstract/abstract.module.ts</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
+    <link rel="stylesheet" href="..\..\prettify.css" />
+    <link rel="stylesheet" href="..\..\base.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(..\..\sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -16,7 +16,7 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../../index.html">All files</a> / <a href="index.html">src/abstract</a> abstract.module.ts
+      <a href="..\..\index.html">All files</a> / <a href="index.html">src/abstract</a> abstract.module.ts
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
@@ -180,33 +180,26 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -220,7 +213,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -251,7 +251,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -302,15 +302,15 @@ import { Log4js } from 'log4js';
  * @type {AbstractApp} parent Parent App or Module
  */
 export class AbstractModule {
-  
+&nbsp;
   private _parent: AbstractApp;
-  public id: string = '';  
+  public id: string = '';
   public _router: express.Router;
   public _path: string = '/';
 &nbsp;
   /**
    * This class should be override for each module you can implement
-   * @param {AbstractApp} parent Parent module or main app 
+   * @param {AbstractApp} parent Parent module or main app
    */
   constructor( id: string, parent: AbstractApp ) {
     this.id = id;
@@ -369,7 +369,7 @@ export class AbstractModule {
 <span class="fstat-no" title="function not covered" >  logDebug(</span> ...params: any ): void {
 <span class="cstat-no" title="statement not covered" >    this.getParent().logDebug( this.id + ':', ...params );</span>
   }
-  
+&nbsp;
   /**
    * This function creates a system info level log
    * @param param One or more string, numbers, or object to be logged
@@ -377,7 +377,7 @@ export class AbstractModule {
   logInfo( ...params: any ): void {
     this.getParent().logInfo( this.id + ':', ...params );
   }
-  
+&nbsp;
   /**
    * This function creates a system warning level log
    * @param param One or more string, numbers, or object to be logged
@@ -385,7 +385,7 @@ export class AbstractModule {
 <span class="fstat-no" title="function not covered" >  logWarn(</span> ...params: any ): void {
 <span class="cstat-no" title="statement not covered" >    this.getParent().logWarn( this.id + ':', ...params );</span>
   }
-  
+&nbsp;
   /**
    * This function creates a system error level log
    * @param param One or more string, numbers, or object to be logged
@@ -397,9 +397,9 @@ export class AbstractModule {
 &nbsp;
   /**
    * This method send a 400 status error
-   * @param req 
-   * @param res 
-   * @param {any} error 
+   * @param req
+   * @param res
+   * @param {any} error
    */
 <span class="fstat-no" title="function not covered" >  sendError(</span> req: express.Request, res: express.Response, error: any ): void {
 <span class="cstat-no" title="statement not covered" >    res.status( 400 );</span>
@@ -407,9 +407,9 @@ export class AbstractModule {
   }
   /**
    * This method send a 200 status and correct data
-   * @param req 
-   * @param res 
-   * @param {any} data 
+   * @param req
+   * @param res
+   * @param {any} data
    */
 <span class="fstat-no" title="function not covered" >  sendResponse(</span> req: express.Request, res: express.Response, data: any ): void {
 <span class="cstat-no" title="statement not covered" >    res.status( 200 );</span>
@@ -424,10 +424,10 @@ export class AbstractModule {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Sep 30 2019 17:13:46 GMT+0200 (GMT+02:00)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Oct 03 2019 08:44:21 GMT+0200 (GMT+02:00)
 </div>
 </div>
-<script src="../../prettify.js"></script>
+<script src="..\..\prettify.js"></script>
 <script>
 window.onload = function () {
         if (typeof prettyPrint === 'function') {
@@ -435,7 +435,7 @@ window.onload = function () {
         }
 };
 </script>
-<script src="../../sorter.js"></script>
-<script src="../../block-navigation.js"></script>
+<script src="..\..\sorter.js"></script>
+<script src="..\..\block-navigation.js"></script>
 </body>
 </html>

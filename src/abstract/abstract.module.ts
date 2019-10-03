@@ -6,15 +6,15 @@ import { Log4js } from 'log4js';
  * @type {AbstractApp} parent Parent App or Module
  */
 export class AbstractModule {
-  
+
   private _parent: AbstractApp;
-  public id: string = '';  
+  public id: string = '';
   public _router: express.Router;
   public _path: string = '/';
 
   /**
    * This class should be override for each module you can implement
-   * @param {AbstractApp} parent Parent module or main app 
+   * @param {AbstractApp} parent Parent module or main app
    */
   constructor( id: string, parent: AbstractApp ) {
     this.id = id;
@@ -73,7 +73,7 @@ export class AbstractModule {
   logDebug( ...params: any ): void {
     this.getParent().logDebug( this.id + ':', ...params );
   }
-  
+
   /**
    * This function creates a system info level log
    * @param param One or more string, numbers, or object to be logged
@@ -81,7 +81,7 @@ export class AbstractModule {
   logInfo( ...params: any ): void {
     this.getParent().logInfo( this.id + ':', ...params );
   }
-  
+
   /**
    * This function creates a system warning level log
    * @param param One or more string, numbers, or object to be logged
@@ -89,7 +89,7 @@ export class AbstractModule {
   logWarn( ...params: any ): void {
     this.getParent().logWarn( this.id + ':', ...params );
   }
-  
+
   /**
    * This function creates a system error level log
    * @param param One or more string, numbers, or object to be logged
@@ -101,9 +101,9 @@ export class AbstractModule {
 
   /**
    * This method send a 400 status error
-   * @param req 
-   * @param res 
-   * @param {any} error 
+   * @param req
+   * @param res
+   * @param {any} error
    */
   sendError( req: express.Request, res: express.Response, error: any ): void {
     res.status( 400 );
@@ -111,9 +111,9 @@ export class AbstractModule {
   }
   /**
    * This method send a 200 status and correct data
-   * @param req 
-   * @param res 
-   * @param {any} data 
+   * @param req
+   * @param res
+   * @param {any} data
    */
   sendResponse( req: express.Request, res: express.Response, data: any ): void {
     res.status( 200 );
